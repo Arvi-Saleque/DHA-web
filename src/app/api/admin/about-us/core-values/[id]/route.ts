@@ -3,11 +3,11 @@ import { prisma } from '@/lib/db';
 import { revalidatePath } from 'next/cache';
 
 export async function DELETE(
-  request: Request, 
-  { params }: { params: { id: string } }
+  request: Request,
+  context: { params: { id: string } }
 ) {
   try {
-    const id = parseInt(params.id, 10);
+    const id = parseInt(context.params.id, 10);
 
     await prisma.coreValue.delete({
       where: { id },
