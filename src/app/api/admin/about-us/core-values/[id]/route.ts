@@ -1,16 +1,16 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { revalidatePath } from 'next/cache';
 
 export async function DELETE(
-  request: NextRequest,
+  request: Request, 
   { params }: { params: { id: string } }
 ) {
   try {
-    const id = parseInt(params.id);
+    const id = parseInt(params.id, 10);
 
     await prisma.coreValue.delete({
-      where: { id }
+      where: { id },
     });
 
     revalidatePath('/aboutus/about');
