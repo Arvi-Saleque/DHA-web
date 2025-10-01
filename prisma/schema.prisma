@@ -1,0 +1,354 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
+
+model SiteSetting {
+  id          Int     @id @default(1)
+  headerTitle String  @default("Madrasa Management System")
+  // Add more site-wide settings as needed
+}
+
+model HeroSection {
+  id          Int      @id @default(1)        // single row app-wide
+  titleLine1  String
+  titleLine2  String
+  subtitle    String
+  bgImageUrl  String
+  cta1Text    String
+  cta1Href    String
+  cta2Text    String
+  cta2Href    String
+  features    Json                              // [{title, description, icon?}]
+  updatedAt   DateTime @updatedAt
+}
+
+model AboutSection { // for home
+  id                 Int      @id @default(1)   // single row app-wide
+  mission            String
+  vision             String
+  description        String
+  yearEstablished    String   @default("2010")
+  totalStudents      String   @default("500+")
+  graduatedStudents  String   @default("1200+")
+  qualifiedTeachers  String   @default("25")
+  updatedAt          DateTime @updatedAt
+}
+
+// Enhanced About Us Page Models
+model AboutUsPage {
+  id                Int      @id @default(1)   // single row app-wide
+  heroTitle         String   @default("About Our Madrasa")
+  heroSubtitle      String   @default("Dedicated to providing exceptional Islamic education that nurtures both spiritual growth and academic excellence, preparing students for success in this world and the hereafter.")
+  historyTitle      String   @default("Our History")
+  historyContent1   String   @default("Established in 2010 with a vision to blend traditional Islamic teachings with modern educational methods, our madrasa has been serving the community for over a decade.")
+  historyContent2   String   @default("From humble beginnings with just 50 students, we have grown to become one of the most respected Islamic educational institutions in the region.")
+  ctaTitle          String   @default("Join Our Community")
+  ctaSubtitle       String   @default("Become part of our educational family and experience the transformative power of quality Islamic education in a nurturing environment.")
+  ctaButton1Text    String   @default("Apply for Admission")
+  ctaButton1Link    String   @default("/admissions/apply")
+  ctaButton2Text    String   @default("Contact Us")
+  ctaButton2Link    String   @default("/contact")
+  updatedAt         DateTime @updatedAt
+}
+
+model AboutStatistic {
+  id          Int      @id @default(autoincrement())
+  title       String
+  value       String
+  iconType    String   // 'calendar', 'students', 'graduation', 'teachers', etc.
+  color       String   @default("blue") // 'blue', 'green', 'purple', 'yellow'
+  displayOrder Int     @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model CoreValue {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  iconType    String   // 'excellence', 'compassion', 'integrity', 'community', etc.
+  displayOrder Int     @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model MissionVision {
+  id              Int      @id @default(1)   // single row app-wide
+  heroTitle       String   @default("Our Mission & Vision")
+  heroSubtitle    String   @default("Discover the driving force behind our commitment to excellence in Islamic education and our vision for the future.")
+  missionTitle    String   @default("Our Mission")
+  missionContent  String   @default("To provide exceptional Islamic education that nurtures both spiritual growth and academic excellence, preparing students to become responsible citizens and leaders in their communities while maintaining strong Islamic values and principles.")
+  missionImage    String?  // Optional image URL for mission section
+  visionTitle     String   @default("Our Vision")
+  visionContent   String   @default("To be a leading institution in Islamic education, recognized for our commitment to excellence, innovation, and the holistic development of our students, creating future leaders who will contribute positively to society.")
+  visionImage     String?  // Optional image URL for vision section
+  goalTitle       String   @default("Our Goals")
+  goalContent     String   @default("We strive to create an environment where students excel academically while developing strong moral character, critical thinking skills, and a deep understanding of Islamic principles that will guide them throughout their lives.")
+  goalImage       String?  // Optional image URL for goals section
+  ctaTitle        String   @default("Join Our Journey")
+  ctaSubtitle     String   @default("Be part of our mission to transform lives through quality Islamic education")
+  ctaButtonText   String   @default("Get Involved")
+  ctaButtonLink   String   @default("/contact")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model AdvisoryCommittee {
+  id              Int      @id @default(1)   // single row app-wide
+  heroTitle       String   @default("Advisory Committee")
+  heroSubtitle    String   @default("Distinguished leaders and experts guiding our institution towards excellence in Islamic education and community development.")
+  introTitle      String   @default("Our Advisory Board")
+  introContent    String   @default("Our Advisory Committee comprises distinguished professionals, scholars, and community leaders who provide strategic guidance and oversight to ensure our institution maintains the highest standards of Islamic education while adapting to contemporary educational needs.")
+  rolesTitle      String   @default("Committee Roles & Responsibilities")
+  rolesContent    String   @default("The Advisory Committee plays a crucial role in shaping our institution's strategic direction, reviewing academic programs, ensuring compliance with educational standards, and fostering community partnerships that enhance our students' learning experience.")
+  ctaTitle        String   @default("Join Our Advisory Network")
+  ctaSubtitle     String   @default("We welcome qualified professionals and community leaders to contribute to our mission")
+  ctaButtonText   String   @default("Get Involved")
+  ctaButtonLink   String   @default("/contact")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model CommitteeMember {
+  id          Int      @id @default(autoincrement())
+  name        String
+  position    String
+  expertise   String
+  bio         String
+  imageUrl    String?  // Optional profile image
+  email       String?  // Optional contact email
+  phone       String?  // Optional contact phone
+  linkedinUrl String?  // Optional LinkedIn profile
+  displayOrder Int     @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ChairmanMessage {
+  id                  Int      @id @default(1)   // single row app-wide
+  heroTitle           String   @default("Chairman's Message")
+  heroSubtitle        String   @default("A message from our esteemed Chairman about our vision, mission, and commitment to excellence in Islamic education.")
+  chairmanName        String   @default("Dr. Muhammad Al-Rashid")
+  chairmanTitle       String   @default("Chairman of the Board")
+  chairmanImage       String   @default("/images/chairman-placeholder.jpg")
+  messageTitle        String   @default("Welcome to Our Institution")
+  messageContent      String   @default("Assalamu Alaikum wa Rahmatullahi wa Barakatuh. It is with great pleasure and humility that I welcome you to our esteemed institution...")
+  visionTitle         String   @default("Our Vision for the Future")
+  visionContent       String   @default("We envision a future where our graduates become beacons of knowledge, wisdom, and moral excellence in their communities...")
+  achievementsTitle   String   @default("Our Achievements and Milestones")
+  achievementsContent String   @default("Over the years, we have achieved remarkable milestones that reflect our dedication to educational excellence...")
+  closingMessage      String   @default("I invite you to join us in this noble journey of education and character building...")
+  signature           String   @default("Dr. Muhammad Al-Rashid")
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
+model LeadershipMember {
+  id          Int      @id @default(autoincrement())
+  name        String
+  position    String
+  description String
+  imageUrl    String?  // Optional profile image
+  email       String?  // Optional contact email
+  phone       String?  // Optional contact phone
+  displayOrder Int     @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Curriculum Management Models
+model CurriculumClass {
+  id              Int               @id @default(autoincrement())
+  name            String            @unique // e.g., "Class 1", "Class 2", "Hifz Program"
+  description     String?           // Optional description
+  displayOrder    Int               @default(0)
+  isActive        Boolean           @default(true)
+  curriculumItems CurriculumItem[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+}
+
+model CurriculumItem {
+  id          Int             @id @default(autoincrement())
+  classId     Int
+  title       String          // e.g., "Mathematics Curriculum", "Islamic Studies"
+  description String?         // Optional description
+  pdfUrl      String?         // PDF file URL for download
+  imageUrl    String?         // Image URL for preview (when View is clicked)
+  fileName    String?         // Original file name for display
+  fileSize    Int?            // File size in bytes
+  uploadedBy  String?         // Admin who uploaded
+  displayOrder Int            @default(0)
+  isActive    Boolean         @default(true)
+  class       CurriculumClass @relation(fields: [classId], references: [id], onDelete: Cascade)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@index([classId])
+}
+
+// Contact Management Models
+model ContactInfo {
+  id              Int      @id @default(autoincrement())
+  title           String   // e.g., "Main Office", "Admissions Office"
+  address         String
+  city            String
+  state           String?
+  zipCode         String?
+  country         String   @default("Bangladesh")
+  phone           String?
+  email           String?
+  fax             String?
+  website         String?
+  workingHours    String?  // e.g., "Mon-Fri: 8AM-5PM"
+  mapEmbedUrl     String?  // Google Maps embed URL
+  description     String?
+  displayOrder    Int      @default(0)
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model ContactSubmission {
+  id          Int      @id @default(autoincrement())
+  firstName   String
+  lastName    String
+  email       String
+  phone       String?
+  subject     String
+  message     String
+  inquiryType String   @default("general") // general, admission, academic, complaint, suggestion
+  isRead      Boolean  @default(false)
+  isReplied   Boolean  @default(false)
+  priority    String   @default("normal") // low, normal, high, urgent
+  status      String   @default("new") // new, in_progress, resolved, closed
+  adminNotes  String?  // Internal notes for admin
+  repliedBy   String?  // Admin who replied
+  repliedAt   DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([isRead])
+  @@index([status])
+  @@index([inquiryType])
+}
+
+// News Management Models
+model NewsCategory {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique // e.g., "Academic", "Events", "Announcements", "General"
+  description String?  // Optional description
+  color       String   @default("blue") // Color for UI display
+  displayOrder Int     @default(0)
+  isActive    Boolean  @default(true)
+  newsItems   NewsItem[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model NewsItem {
+  id           Int          @id @default(autoincrement())
+  title        String       // News headline
+  slug         String       @unique // URL-friendly version of title
+  excerpt      String?      // Short summary for preview
+  content      String       // Full news content (rich text/HTML)
+  featuredImage String?     // Main image URL
+  categoryId   Int
+  category     NewsCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  author       String?      // Author name
+  publishedAt  DateTime?    // When to publish (null = draft)
+  isPublished  Boolean      @default(false)
+  isFeatured   Boolean      @default(false) // For highlighting important news
+  viewCount    Int          @default(0)
+  tags         String[]     // Array of tags for filtering
+  metaTitle    String?      // SEO meta title
+  metaDescription String?   // SEO meta description
+  displayOrder Int          @default(0)
+  isActive     Boolean      @default(true)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@index([categoryId])
+  @@index([publishedAt])
+  @@index([isPublished])
+  @@index([isFeatured])
+}
+
+// Class Routine Management Models
+model ClassRoutineClass {
+  id                  Int                 @id @default(autoincrement())
+  name                String              @unique // e.g., "Class 1", "Class 2", "Hifz Program"
+  description         String?             // Optional description
+  displayOrder        Int                 @default(0)
+  isActive            Boolean             @default(true)
+  classRoutineItems   ClassRoutineItem[]
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+}
+
+model ClassRoutineItem {
+  id           Int                @id @default(autoincrement())
+  classId      Int
+  title        String             // e.g., "Monday Schedule", "Weekly Routine"
+  description  String?            // Optional description
+  pdfUrl       String?            // PDF file URL for download
+  imageUrl     String?            // Image URL for preview (when View is clicked)
+  fileName     String?            // Original file name for display
+  fileSize     Int?               // File size in bytes
+  uploadedBy   String?            // Admin who uploaded
+  displayOrder Int                @default(0)
+  isActive     Boolean            @default(true)
+  class        ClassRoutineClass  @relation(fields: [classId], references: [id], onDelete: Cascade)
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+
+  @@index([classId])
+}
+
+// Syllabus Management Models
+model SyllabusClass {
+  id            Int           @id @default(autoincrement())
+  name          String        @unique
+  description   String?
+  displayOrder  Int           @default(0)
+  isActive      Boolean       @default(true)
+  syllabusItems SyllabusItem[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model SyllabusItem {
+  id           Int            @id @default(autoincrement())
+  classId      Int
+  title        String
+  description  String?
+  pdfUrl       String?
+  imageUrl     String?
+  fileName     String?
+  fileSize     Int?
+  uploadedBy   String?
+  displayOrder Int            @default(0)
+  isActive     Boolean        @default(true)
+  class        SyllabusClass  @relation(fields: [classId], references: [id], onDelete: Cascade)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@index([classId])
+}
